@@ -21,9 +21,106 @@ a {
   text-decoration: none;
 }
 
+@-webkit-keyframes animate-logo {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  40% {
+    -webkit-transform: rotate(-60deg);
+            transform: rotate(-60deg);
+  }
+  100% {
+    -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+  }
+}
+
+@keyframes animate-logo {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  40% {
+    -webkit-transform: rotate(-60deg);
+            transform: rotate(-60deg);
+  }
+  100% {
+    -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+  }
+}
+
+@-webkit-keyframes animate-logo-reverse {
+  0% {
+    -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+  }
+  60% {
+    -webkit-transform: rotate(10deg);
+            transform: rotate(10deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+}
+
+@keyframes animate-logo-reverse {
+  0% {
+    -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+  }
+  60% {
+    -webkit-transform: rotate(10deg);
+            transform: rotate(10deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+}
+
 body {
   background-color: #eef3f9;
   font-family: "Montserrat", sans-serif;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+body.dark-mode {
+  background-color: #45575c;
+}
+
+body.dark-mode .logo-btn {
+  -webkit-animation: animate-logo 1s ease forwards !important;
+          animation: animate-logo 1s ease forwards !important;
+}
+
+body.dark-mode .divider {
+  background-color: #637373 !important;
+}
+
+body.dark-mode .task-list-container {
+  -webkit-box-shadow: 10px 40px 50px rgba(29, 29, 29, 0.2) !important;
+          box-shadow: 10px 40px 50px rgba(29, 29, 29, 0.2) !important;
+  background-color: #637373 !important;
+}
+
+body.dark-mode .task-list-container .task-list-title {
+  color: white !important;
+}
+
+body.dark-mode .task-list-container .icon-container svg rect {
+  fill: white;
+}
+
+body.dark-mode .task-list-container .icon-container svg circle {
+  stroke: white;
+}
+
+body.dark-mode .task-list-container .add-task-btn {
+  color: white !important;
 }
 
 .container {
@@ -48,13 +145,17 @@ body {
   height: 15vh;
 }
 
-#header .logo-wrapper {
+#header .logo-btn {
   cursor: pointer;
   width: 70px;
   margin: auto;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  -webkit-animation: animate-logo-reverse 1s ease forwards;
+          animation: animate-logo-reverse 1s ease forwards;
 }
 
-#header .logo-wrapper img {
+#header .logo-btn img {
   max-height: 100%;
   max-width: 100%;
 }
@@ -103,6 +204,8 @@ body {
           box-shadow: 10px 40px 50px #d1d1d1;
   background-color: #f5f5f5;
   border-radius: 10px;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
 }
 
 #board .task-list-container:nth-child(1) {
@@ -287,7 +390,7 @@ body {
   position: relative;
 }
 
-#board .task-item {
+.task-item {
   cursor: pointer;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -318,18 +421,18 @@ body {
           animation: expand 0.3s ease-out;
 }
 
-#board .task-item:hover {
+.task-item:hover {
   background-image: none;
   background-color: #139545;
 }
 
-#board .task-item .task-title {
+.task-item .task-title {
   font-family: inherit;
   font-weight: inherit;
   font-size: inherit;
 }
 
-#board .task-item .task-title-input {
+.task-item .task-title-input {
   width: 80%;
   font-family: inherit;
   font-size: inherit;
@@ -366,7 +469,7 @@ body {
   margin: 0.5em 0;
   top: 0;
   border-radius: 3px;
-  border: 2px solid green;
+  border: 2px solid #6ebd41;
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
   background-color: #f5f5f5;

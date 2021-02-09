@@ -125,13 +125,13 @@ board.addEventListener("dragover", (e) => {
 
 const taskTitleInput = document.createElement("input");
 taskTitleInput.classList.add("task-title-input");
-taskTitleInput.placeholder = "New Task";
+taskTitleInput.placeholder = "New task";
 
 // controller
 const addNewName = (id, name) => {
   // Update the Model
   const task = Task.allTasks.find((t) => t.id === id);
-  task.name = name ? name : "New Task";
+  task.name = name ? name : "New task";
 
   // Update the view
   task.render();
@@ -160,3 +160,10 @@ task.render();
 
 // const taskTemplate = document.querySelector('script[data-template="task"]')
 //   .innerHTML;
+
+const logoBtn = document.querySelector(".logo-btn");
+
+logoBtn.addEventListener("click", () => {
+  console.log("hi");
+  document.body.classList.toggle("dark-mode");
+});

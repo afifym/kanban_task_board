@@ -9,7 +9,7 @@ const addBtns = document.querySelectorAll(".add-btn-container");
 divider.classList.add("divider");
 let prevCard = null;
 let lastPrevCard = null;
-
+let modalId = undefined;
 // --------------------------------------
 // Utility Functions
 // --------------------------------------
@@ -64,10 +64,6 @@ addBtns.forEach((btn) => {
     taskTitleInput.value = "";
     newElem.appendChild(taskTitleInput);
     taskTitleInput.focus();
-
-    // newTask.list = parseInt(e.target.parentElement.dataset.listnum);
-    // taskTitleInput.value = "";
-    // const task = newTask.addToDom(e.target.parentElement.dataset.listnum);
   });
 });
 
@@ -164,6 +160,40 @@ task.render();
 const logoBtn = document.querySelector(".logo-btn");
 
 logoBtn.addEventListener("click", () => {
-  console.log("hi");
   document.body.classList.toggle("dark-mode");
 });
+
+const colors = ["#215B60", "#92D546", "#F4E12A", "#F6892F", "#EA4445"];
+
+const modalForm = document.querySelector(".task-modal form");
+
+modalForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const updates = {
+    name: this.name.value,
+    type: this.type.value,
+    bg: colors[parseInt(this.bg.value)],
+    ac: colors[parseInt(this.accent.value)],
+    deadline: this.deadline.value,
+  };
+
+  // Controller
+  updateTask(modalId, updates);
+
+  modalContainer.classList.remove("modal-active");
+});
+
+function updateTask(id, updates) {
+  // Update Model
+  const task = Task.allTasks.find((t) => t.id === id);
+  const { name, type, bg, ac, deadline } = updates;
+
+  task.name = name;
+  task.type = type;
+  task.bg = bg;
+  task.ac = ac;
+  task.deadline = deadline;
+
+  // Update View
+  task.render();
+}

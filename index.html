@@ -315,7 +315,112 @@
     <!-- MODAL -->
     <div class="task-modal-container">
       <div class="task-modal">
-        <h4 class="modal-title"></h4>
+        <h4 id="title" class="modal-title">Working</h4>
+
+        <form action="">
+          <!-- ITEM -->
+          <article class="form-item form-name">
+            <label class="item-label" for="name">Name</label>
+            <input type="text" name="name" id="name" />
+          </article>
+          <!-- ITEM -->
+          <article class="form-item form-type">
+            <label class="item-label" for="">Type</label>
+            <ul class="inputs-list">
+              <!-- ITEM -->
+              <li class="input-item">
+                <input
+                  name="type"
+                  type="radio"
+                  id="short-term"
+                  value="short-term"
+                />
+                <label class="input-label" for="short-term">short-term</label>
+              </li>
+              <!-- ITEM -->
+              <li class="input-item">
+                <input
+                  name="type"
+                  type="radio"
+                  id="long-term"
+                  value="long-term"
+                />
+                <label class="input-label" for="long-term">long-term</label>
+              </li>
+              <!-- ITEM -->
+              <li class="input-item">
+                <input name="type" type="radio" id="habit" value="habit" />
+                <label class="input-label" for="habit">habit</label>
+              </li>
+            </ul>
+          </article>
+          <!-- ITEM -->
+          <article class="form-item form-bg">
+            <label class="item-label">Background</label>
+            <ul class="inputs-list">
+              <!-- ITEM -->
+              <li class="input-item">
+                <input name="bg" type="radio" id="red" value="0" />
+                <label for="red" class="red"></label>
+              </li>
+              <!-- ITEM -->
+              <li class="input-item">
+                <input name="bg" type="radio" id="green" value="1" />
+                <label for="green" class="green"></label>
+              </li>
+              <!-- ITEM -->
+              <li class="input-item">
+                <input name="bg" type="radio" id="blue" value="2" />
+                <label for="blue" class="blue"></label>
+              </li>
+              <li class="input-item">
+                <input name="bg" type="radio" id="purple" value="3" />
+                <label for="purple" class="purple"></label>
+              </li>
+              <li class="input-item">
+                <input name="bg" type="radio" id="pink" value="4" />
+                <label for="pink" class="pink"></label>
+              </li>
+            </ul>
+          </article>
+          <!-- ITEM -->
+          <article class="form-item form-accent">
+            <label class="item-label">Accent</label>
+            <ul class="inputs-list">
+              <!-- ITEM -->
+              <li class="input-item">
+                <input name="accent" type="radio" id="acred" value="0" />
+                <label for="acred" class="red"></label>
+              </li>
+              <!-- ITEM -->
+              <li class="input-item">
+                <input name="accent" type="radio" id="acgreen" value="1" />
+                <label for="acgreen" class="green"></label>
+              </li>
+              <!-- ITEM -->
+              <li class="input-item">
+                <input name="accent" type="radio" id="acblue" value="2" />
+                <label for="acblue" class="blue"></label>
+              </li>
+              <li class="input-item">
+                <input name="accent" type="radio" id="acpurple" value="3" />
+                <label for="acpurple" class="purple"></label>
+              </li>
+              <li class="input-item">
+                <input name="accent" type="radio" id="acpink" value="4" />
+                <label for="acpink" class="pink"></label>
+              </li>
+            </ul>
+          </article>
+          <!-- ITEM -->
+          <article class="form-item form-deadline">
+            <label for="deadline" class="item-label">Deadline</label>
+            <input type="date" id="deadline" />
+          </article>
+
+          <!-- BUTTON -->
+          <button class="form-btn" type="submit">Change</button>
+        </form>
       </div>
     </div>
 

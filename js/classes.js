@@ -16,7 +16,9 @@ class Task {
     progress = 0.0,
     deadline = null,
     list = 0,
-    order = 0
+    order = 0,
+    bg = "#ffffff",
+    ac = "#ffffff"
   ) {
     this.id = Task.lastID;
     this.name = name;
@@ -26,7 +28,8 @@ class Task {
     this.deadline = deadline;
     this.list = list;
     this.order = order;
-
+    this.bg = bg;
+    this.ac = ac;
     this.elemConstructor();
 
     Task.allTasks.push(this);
@@ -69,18 +72,32 @@ class Task {
 
   onClick(e) {
     e.stopPropagation();
+
     modalContainer.classList.add("modal-active");
     modalContainer.querySelector(".task-modal").focus = true;
+
+    modalContainer.querySelector(".modal-title").innerHTML = getTask(
+      parseInt(this.dataset.taskid)
+    ).name;
+
+    modalId = parseInt(this.dataset.taskid);
   }
 
   render() {
     this.elemName.innerHTML = this.name;
-
+    this.elem.setAttribute(
+      "style",
+      `background-color: ${this.bg}; border-left-color: ${this.ac};`
+    );
     document
       .querySelector(`[data-listnum="${this.list}"]`)
       .querySelector(".task-list")
       .appendChild(this.elem);
   }
+}
+
+function getTask(id) {
+  return Task.allTasks.find((t) => t.id === id);
 }
 
 // --------------------------------------

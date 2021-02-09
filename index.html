@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kanban Task Board</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="shortcut icon" href="./images/logo.svg" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header id="header">
+      <div class="container">
+        <div class="logo-wrapper">
+          <img src="./images/logo.svg" alt="kanban" />
+        </div>
+      </div>
+    </header>
+    <!-- BOARD -->
+    <main id="board">
+      <div class="container">
+        <!-- ARTICLE NOT-STARTED -->
+        <article class="task-list-container" data-listnum="0">
+          <div class="task-list-intro">
+            <h4 class="task-list-title">Not Started</h4>
+            <div class="task-list-settings">
+              <svg
+                width="41"
+                height="9"
+                viewBox="0 0 41 9"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 4.5C9 6.98528 6.98528 9 4.5 9C2.01472 9 0 6.98528 0 4.5C0 2.01472 2.01472 0 4.5 0C6.98528 0 9 2.01472 9 4.5Z"
+                  fill="#C4C4C4"
+                />
+                <path
+                  d="M25 4.5C25 6.98528 22.9853 9 20.5 9C18.0147 9 16 6.98528 16 4.5C16 2.01472 18.0147 0 20.5 0C22.9853 0 25 2.01472 25 4.5Z"
+                  fill="#C4C4C4"
+                />
+                <path
+                  d="M41 4.5C41 6.98528 38.9853 9 36.5 9C34.0147 9 32 6.98528 32 4.5C32 2.01472 34.0147 0 36.5 0C38.9853 0 41 2.01472 41 4.5Z"
+                  fill="#C4C4C4"
+                />
+              </svg>
+            </div>
+            <div class="task-list-popup">
+              <form action="">
+                <div class="form-input-container">
+                  <label for="accent">Accent</label>
+                  <input type="color" />
+                </div>
+                <div class="form-input-container">
+                  <label for="name">Name</label>
+                  <input type="text" />
+                </div>
+              </form>
+            </div>
+          </div>
+          <ul class="task-list" draggable=""></ul>
+          <div class="add-btn-container">
+            <div class="icon-container">
+              <svg
+                width="72"
+                height="72"
+                viewBox="0 0 72 72"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="36"
+                  cy="36"
+                  r="34"
+                  stroke="#404552"
+                  stroke-width="4"
+                />
+                <path
+                  d="M55 38.5472H38.7517V54H33.2483V38.5472H17V33.5377H33.2483V18H38.7517V33.5377H55V38.5472Z"
+                  fill="#404552"
+                />
+              </svg>
+            </div>
+            <button class="add-task-btn">Add task</button>
+          </div>
+        </article>
+        <!-- ARTICLE NEXT-UP -->
+        <article class="task-list-container" data-listnum="1">
+          <div class="task-list-intro">
+            <h4 class="task-list-title">Next Up</h4>
+            <div class="task-list-settings">
+              <svg
+                width="41"
+                height="9"
+                viewBox="0 0 41 9"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 4.5C9 6.98528 6.98528 9 4.5 9C2.01472 9 0 6.98528 0 4.5C0 2.01472 2.01472 0 4.5 0C6.98528 0 9 2.01472 9 4.5Z"
+                  fill="#C4C4C4"
+                />
+                <path
+                  d="M25 4.5C25 6.98528 22.9853 9 20.5 9C18.0147 9 16 6.98528 16 4.5C16 2.01472 18.0147 0 20.5 0C22.9853 0 25 2.01472 25 4.5Z"
+                  fill="#C4C4C4"
+                />
+                <path
+                  d="M41 4.5C41 6.98528 38.9853 9 36.5 9C34.0147 9 32 6.98528 32 4.5C32 2.01472 34.0147 0 36.5 0C38.9853 0 41 2.01472 41 4.5Z"
+                  fill="#C4C4C4"
+                />
+              </svg>
+            </div>
+          </div>
+          <ul class="task-list"></ul>
+          <div class="add-btn-container">
+            <div class="icon-container">
+              <svg
+                width="72"
+                height="72"
+                viewBox="0 0 72 72"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="36"
+                  cy="36"
+                  r="34"
+                  stroke="#404552"
+                  stroke-width="4"
+                />
+                <path
+                  d="M55 38.5472H38.7517V54H33.2483V38.5472H17V33.5377H33.2483V18H38.7517V33.5377H55V38.5472Z"
+                  fill="#404552"
+                />
+              </svg>
+            </div>
+            <button class="add-task-btn">Add task</button>
+          </div>
+        </article>
+        <!-- ARTICLE IN-PROGRESS -->
+        <article class="task-list-container" data-listnum="2">
+          <div class="task-list-intro">
+            <h4 class="task-list-title">In Progress</h4>
+            <div class="task-list-settings">
+              <svg
+                width="41"
+                height="9"
+                viewBox="0 0 41 9"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 4.5C9 6.98528 6.98528 9 4.5 9C2.01472 9 0 6.98528 0 4.5C0 2.01472 2.01472 0 4.5 0C6.98528 0 9 2.01472 9 4.5Z"
+                  fill="#C4C4C4"
+                />
+                <path
+                  d="M25 4.5C25 6.98528 22.9853 9 20.5 9C18.0147 9 16 6.98528 16 4.5C16 2.01472 18.0147 0 20.5 0C22.9853 0 25 2.01472 25 4.5Z"
+                  fill="#C4C4C4"
+                />
+                <path
+                  d="M41 4.5C41 6.98528 38.9853 9 36.5 9C34.0147 9 32 6.98528 32 4.5C32 2.01472 34.0147 0 36.5 0C38.9853 0 41 2.01472 41 4.5Z"
+                  fill="#C4C4C4"
+                />
+              </svg>
+            </div>
+          </div>
+          <ul class="task-list"></ul>
+          <div class="add-btn-container">
+            <div class="icon-container">
+              <svg
+                width="72"
+                height="72"
+                viewBox="0 0 72 72"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="36"
+                  cy="36"
+                  r="34"
+                  stroke="#404552"
+                  stroke-width="4"
+                />
+                <path
+                  d="M55 38.5472H38.7517V54H33.2483V38.5472H17V33.5377H33.2483V18H38.7517V33.5377H55V38.5472Z"
+                  fill="#404552"
+                />
+              </svg>
+            </div>
+            <button class="add-task-btn">Add task</button>
+          </div>
+        </article>
+        <!-- ARTICLE COMPLETED -->
+        <article class="task-list-container" data-listnum="3">
+          <div class="task-list-intro">
+            <h4 class="task-list-title">Completed</h4>
+            <div class="task-list-settings">
+              <svg
+                width="41"
+                height="9"
+                viewBox="0 0 41 9"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 4.5C9 6.98528 6.98528 9 4.5 9C2.01472 9 0 6.98528 0 4.5C0 2.01472 2.01472 0 4.5 0C6.98528 0 9 2.01472 9 4.5Z"
+                  fill="#C4C4C4"
+                />
+                <path
+                  d="M25 4.5C25 6.98528 22.9853 9 20.5 9C18.0147 9 16 6.98528 16 4.5C16 2.01472 18.0147 0 20.5 0C22.9853 0 25 2.01472 25 4.5Z"
+                  fill="#C4C4C4"
+                />
+                <path
+                  d="M41 4.5C41 6.98528 38.9853 9 36.5 9C34.0147 9 32 6.98528 32 4.5C32 2.01472 34.0147 0 36.5 0C38.9853 0 41 2.01472 41 4.5Z"
+                  fill="#C4C4C4"
+                />
+              </svg>
+            </div>
+          </div>
+          <ul class="task-list"></ul>
+          <div class="add-btn-container">
+            <div class="icon-container">
+              <svg
+                width="72"
+                height="72"
+                viewBox="0 0 72 72"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="36"
+                  cy="36"
+                  r="34"
+                  stroke="#404552"
+                  stroke-width="4"
+                />
+                <path
+                  d="M55 38.5472H38.7517V54H33.2483V38.5472H17V33.5377H33.2483V18H38.7517V33.5377H55V38.5472Z"
+                  fill="#404552"
+                />
+              </svg>
+            </div>
+            <button class="add-task-btn">Add task</button>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <!-- MODAL -->
+    <div class="task-modal-container">
+      <div class="task-modal">
+        <h4 class="modal-title"></h4>
+      </div>
+    </div>
+
+    <script type="text/template" data-template="task">
+      <li class="task-item" draggable>
+        <h5 class="task-name"></h5>
+      </li>
+    </script>
+
+    <script src="js/classes.js"></script>
+    <script src="./js/app.js"></script>
+  </body>
+</html>

@@ -133,11 +133,11 @@ task = new Task("This", "habit", 0, "2021-02-10", 0, 0, 4);
 task.render();
 task.renderProgress();
 
-task = new Task("is", "habit", 0.4, "2021-02-10", 1, 0, 0);
+task = new Task("is", "long-term", 0.4, "2021-02-10", 1, 0, 0);
 task.render();
 task.renderProgress();
 
-task = new Task("a Kanban", "habit", 0.7, "2021-02-10", 2, 0, 3);
+task = new Task("a Kanban", "short-term", 0.7, "2021-02-10", 2, 0, 3);
 task.render();
 task.renderProgress();
 

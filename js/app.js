@@ -128,7 +128,20 @@ taskTitleInput.addEventListener("keypress", (e) => {
   if (e.keyCode == 13) addNewName(e);
 });
 
-const task = new Task("Working");
+let task;
+task = new Task("This", "habit", 0, "2021-02-10", 0, 0, 4);
+task.render();
+task.renderProgress();
+
+task = new Task("is", "habit", 0.4, "2021-02-10", 1, 0, 0);
+task.render();
+task.renderProgress();
+
+task = new Task("a Kanban", "habit", 0.7, "2021-02-10", 2, 0, 3);
+task.render();
+task.renderProgress();
+
+task = new Task("Board", "habit", 1, "2021-02-10", 3, 0, 1);
 task.render();
 task.renderProgress();
 

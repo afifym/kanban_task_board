@@ -559,10 +559,19 @@ body.dark-mode .task-list-container .add-task-btn {
   color: gray;
   -webkit-box-shadow: 0 7px 5px -3px rgba(160, 160, 160, 0.6);
           box-shadow: 0 7px 5px -3px rgba(160, 160, 160, 0.6);
+  border: 1px solid #2783da;
+  color: #2783da;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .task-modal-container .form-btn:hover {
-  color: #404552;
+  -webkit-box-shadow: 0 7px 5px -3px rgba(71, 71, 71, 0.6);
+          box-shadow: 0 7px 5px -3px rgba(71, 71, 71, 0.6);
+}
+
+.modal-title {
+  color: #2783da;
 }
 
 form {
@@ -683,7 +692,6 @@ form .form-name input {
 
 .form-deadline input {
   cursor: pointer;
-  font-weight: bold;
   font-size: 1.2rem;
   outline: none;
   border: none;
@@ -728,12 +736,6 @@ form .form-name input {
   border: none;
   width: 60%;
   border-color: -internal-light-dark(#ee1414, #ee1414) !important;
-}
-
-.form-progress input::-webkit-slider-thumb {
-  -webkit-appearance: none;
-          appearance: none;
-  background: red;
 }
 
 input::-webkit-input-placeholder {

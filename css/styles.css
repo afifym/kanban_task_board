@@ -13,6 +13,11 @@ button {
   font-family: "Montserrat", sans-serif;
 }
 
+input,
+label {
+  font-family: "Montserrat", sans-serif;
+}
+
 li {
   list-style: none;
 }
@@ -86,6 +91,9 @@ body {
   font-family: "Montserrat", sans-serif;
   -webkit-transition: all 0.5s ease;
   transition: all 0.5s ease;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: 100% 160%;
 }
 
 body.dark-mode {
@@ -397,26 +405,26 @@ body.dark-mode .task-list-container .add-task-btn {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
+  -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-box-pack: none;
-      -ms-flex-pack: none;
-          justify-content: none;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: none;
+      -ms-flex-align: none;
+          align-items: none;
   height: 50px;
   width: 100%;
-  padding: 0 1em;
+  padding: 0.2em 1em;
   margin: 0.5em 0;
   color: #6d6d6d;
   background-color: #4da167;
   border-radius: 3px;
   font-weight: 300;
   font-size: 1rem;
-  border-width: 3px;
+  border-width: 4px;
   border-left-style: solid;
   background-color: white;
   -webkit-transition: all 0.3s ease;
@@ -427,19 +435,28 @@ body.dark-mode .task-list-container .add-task-btn {
           animation: expand 0.3s ease-out;
 }
 
-.task-item:hover {
-  -webkit-transform: scale(1.01);
-          transform: scale(1.01);
+.task-item .task-prog-gray {
+  pointer-events: none;
+  width: 30%;
+  height: 5px;
+  background-color: rgba(206, 206, 206, 0.5);
+  border-radius: 10px;
 }
 
-.task-item .task-title {
+.task-item .task-prog-gray .task-prog-green {
+  width: 30%;
+  height: 100%;
+  border-radius: 10px;
+  background-color: #2baa2b;
+}
+
+.task-item .task-name {
   font-family: inherit;
   font-weight: inherit;
   font-size: inherit;
 }
 
 .task-item .task-title-input {
-  width: 80%;
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
@@ -447,8 +464,13 @@ body.dark-mode .task-list-container .add-task-btn {
   background: none;
   border: none;
   outline: none;
-  color: white;
-  border-bottom: 1px solid white;
+  color: #6d6d6d;
+  border-bottom: 1px solid #6d6d6d;
+}
+
+.task-item:hover {
+  -webkit-transform: scale(1.01);
+          transform: scale(1.01);
 }
 
 @-webkit-keyframes expand {
@@ -597,7 +619,11 @@ form .form-item .inputs-list {
   width: 60%;
 }
 
-.form-bg .inputs-list,
+form .form-name input {
+  border-radius: 5px;
+  font-weight: 500;
+}
+
 .form-accent .inputs-list {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -614,7 +640,6 @@ form .form-item .inputs-list {
           align-items: center;
 }
 
-.form-bg .inputs-list .input-item,
 .form-accent .inputs-list .input-item {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -631,7 +656,6 @@ form .form-item .inputs-list {
           align-items: center;
 }
 
-.form-bg .inputs-list label,
 .form-accent .inputs-list label {
   cursor: pointer;
   display: block;
@@ -641,41 +665,14 @@ form .form-item .inputs-list {
   transition: all 0.1s ease;
 }
 
-.form-bg .inputs-list label.red,
-.form-accent .inputs-list label.red {
-  background-color: red;
-}
-
-.form-bg .inputs-list label.green,
-.form-accent .inputs-list label.green {
-  background-color: green;
-}
-
-.form-bg .inputs-list label.blue,
-.form-accent .inputs-list label.blue {
-  background-color: lightseagreen;
-}
-
-.form-bg .inputs-list label.purple,
-.form-accent .inputs-list label.purple {
-  background-color: purple;
-}
-
-.form-bg .inputs-list label.pink,
-.form-accent .inputs-list label.pink {
-  background-color: pink;
-}
-
-.form-bg .inputs-list input,
 .form-accent .inputs-list input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.form-bg .inputs-list input:checked + label,
 .form-accent .inputs-list input:checked + label {
-  border: 3px solid black;
+  border: 3px solid silver;
   border-radius: 50%;
 }
 
@@ -723,6 +720,20 @@ form .form-item .inputs-list {
 .form-type .inputs-list input:checked + label {
   opacity: 1;
   font-weight: bold;
+}
+
+.form-progress input {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  width: 60%;
+  border-color: -internal-light-dark(#ee1414, #ee1414) !important;
+}
+
+.form-progress input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+          appearance: none;
+  background: red;
 }
 
 input::-webkit-input-placeholder {

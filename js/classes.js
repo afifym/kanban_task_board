@@ -11,25 +11,21 @@ class Task {
 
   constructor(
     name = "",
-    priority = "3",
-    type = null,
+    type = "habit",
     progress = 0.0,
     deadline = null,
     list = 0,
     order = 0,
-    bg = "#ffffff",
-    ac = "#ffffff"
+    acIndex = 2
   ) {
     this.id = Task.lastID;
     this.name = name;
     this.type = type;
-    this.priority = priority;
     this.progress = progress;
     this.deadline = deadline;
     this.list = list;
     this.order = order;
-    this.bg = bg;
-    this.ac = ac;
+    this.acIndex = acIndex;
     this.elemConstructor();
 
     Task.allTasks.push(this);
@@ -48,37 +44,75 @@ class Task {
     this.elemName = document.createElement("h5");
     this.elemName.classList.add("task-name");
 
-    this.elem.appendChild(this.elemName);
-  }
+    this.elemProg = document.createElement("div");
+    this.elemProgInner = document.createElement("div");
 
+    this.elemProg.classList.add("task-prog-gray");
+    this.elemProgInner.classList.add("task-prog-green");
+
+    this.elemProg.appendChild(this.elemProgInner);
+    this.elem.appendChild(this.elemName);
+
+    // this.elemName.insertAdjacentElement(this.elemProg);
+  }
+  renderProgress() {
+    this.elem.appendChild(this.elemProg);
+    this.elemProgInner.setAttribute("style", `width: ${this.progress * 100}%`);
+  }
   // ---------
   // VIEW
   // ---------
   onDragStart(e) {
     e.target.classList.add("task-dragging");
+    e.dataTransfer.setData("text", 1);
   }
 
   onDragEnd(e) {
-    if (prevCard.classList.contains("task-list")) {
-      prevCard.prepend(e.target);
-    } else if (prevCard.classList.contains("task-item")) {
-      prevCard.classList.remove("border-bottom");
-      prevCard.parentElement.insertBefore(e.target, prevCard.nextSibling);
+    divider.remove();
+    e.target.classList.remove("task-dragging");
+
+    let nextSibling = e.target.nextSibling;
+    while (nextSibling) {
+      decrementOrder(parseInt(nextSibling.dataset.taskid));
+      nextSibling = nextSibling.nextSibling;
     }
 
-    e.target.classList.remove("task-dragging");
-    divider.remove();
+    if (itemOrList.classList.contains("task-list")) {
+      [...itemOrList.children].forEach((itemElem) => {
+        incrementOrder(parseInt(itemElem.dataset.taskid));
+      });
+      itemOrList.prepend(e.target);
+      updateTask(parseInt(this.dataset.taskid), {
+        order: 0,
+        list: parseInt(itemOrList.parentElement.dataset.listnum),
+      });
+      // ----------------
+    } else if (itemOrList.classList.contains("task-item")) {
+      const currentOrder = getPropertyValue(
+        parseInt(itemOrList.dataset.taskid),
+        "order"
+      );
+
+      itemOrList.parentElement.insertBefore(e.target, itemOrList.nextSibling);
+
+      nextSibling = itemOrList.nextSibling;
+      while (nextSibling) {
+        incrementOrder(parseInt(nextSibling.dataset.taskid));
+        nextSibling = nextSibling.nextSibling;
+      }
+
+      updateTask(parseInt(this.dataset.taskid), {
+        order: currentOrder + 1,
+        list: parseInt(itemOrList.parentElement.parentElement.dataset.listnum),
+      });
+    }
   }
 
   onClick(e) {
     e.stopPropagation();
-
+    updateModal(parseInt(this.dataset.taskid));
     modalContainer.classList.add("modal-active");
     modalContainer.querySelector(".task-modal").focus = true;
-
-    modalContainer.querySelector(".modal-title").innerHTML = getTask(
-      parseInt(this.dataset.taskid)
-    ).name;
 
     modalId = parseInt(this.dataset.taskid);
   }
@@ -87,122 +121,37 @@ class Task {
     this.elemName.innerHTML = this.name;
     this.elem.setAttribute(
       "style",
-      `background-color: ${this.bg}; border-left-color: ${this.ac};`
+      `border-left-color: ${colors[this.acIndex]};`
     );
-    document
+
+    const list = document
       .querySelector(`[data-listnum="${this.list}"]`)
-      .querySelector(".task-list")
-      .appendChild(this.elem);
+      .querySelector(".task-list");
+
+    list.insertBefore(this.elem, list.children[this.order + 1]);
   }
 }
 
-function getTask(id) {
-  return Task.allTasks.find((t) => t.id === id);
+function luminance(hex) {
+  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+    return r + r + g + g + b + b;
+  });
+
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+
+  const rgb = result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
+
+  const { r, g, b } = rgb;
+  var a = [r, g, b].map(function (v) {
+    v /= 255;
+    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  });
+  return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
 }
-
-// --------------------------------------
-// NameInput
-// --------------------------------------
-class NameInput {
-  constructor() {
-    this.elemConstructor();
-  }
-
-  elemConstructor() {
-    this.elem = document.createElement("input");
-    this.elem.placeholder = "New Task";
-    this.elem.classList.add("task-title-input");
-
-    this.elem.addEventListener("blur", (e) => {
-      if (!(e.keyCode == 13)) onAddName(e);
-    });
-
-    this.elem.addEventListener("keypress", (e) => {
-      if (e.keyCode == 13) onAddName(e);
-    });
-
-    this.elem.addEventListener("click", (e) => {
-      e.stopPropagation();
-    });
-  }
-
-  onAddName(e) {
-    const newTitle = e.target.value;
-    const taskId = e.target.parentElement.dataset.taskId;
-
-    this.updateUI(taskId, newTitle);
-    e.target.remove();
-  }
-
-  updateUI(taskId, newTitle) {
-    e.target.parentElement.querySelector(".task-title").innerHTML = newTitle;
-  }
-
-  updateData() {}
-}
-
-// --------------------------------------
-// TaskModal
-// --------------------------------------
-
-// class Task {
-//   static idCounter = 0;
-//   constructor(
-//     title = "",
-//     priority = "3",
-//     type = null,
-//     progress = 0.0,
-//     deadline = null
-//   ) {
-//     this.title = title;
-//     this.priority = priority;
-//     this.type = type;
-//     this.progress = progress;
-//     this.deadline = deadline;
-//     this.id = Task.taskId;
-//     Task.idCounter++;
-//   }
-
-//   taskDragStart(e) {
-//     e.target.classList.add("task-dragging");
-//   }
-
-//   taskDragEnd(e) {
-//     if (prevCard.classList.contains("task-list")) {
-//       prevCard.prepend(e.target);
-//     } else if (prevCard.classList.contains("task-item")) {
-//       prevCard.classList.remove("border-bottom");
-//       prevCard.parentElement.insertBefore(e.target, prevCard.nextSibling);
-//     }
-//     e.target.classList.remove("task-dragging");
-//     divider.remove();
-//   }
-
-//   taskClick(e) {
-//     e.stopPropagation();
-//     modalContainer.classList.add("modal-active");
-//     modalContainer.querySelector(".task-modal").focus = true;
-//   }
-
-//   addToDom(listNum) {
-//     const parentList = document
-//       .querySelector(`[data-listnum="${listNum}"]`)
-//       .querySelector(".task-list");
-//     const newTask = document.createElement("li");
-//     const newTitle = document.createElement("h5");
-
-//     newTitle.innerHTML = this.title;
-//     newTitle.classList.add("task-title");
-//     newTask.appendChild(newTitle);
-//     newTask.draggable = true;
-//     newTask.classList.add("task-item");
-//     newTask.dataset.taskId = this.id;
-//     newTask.addEventListener("dragstart", this.taskDragStart);
-//     newTask.addEventListener("dragend", this.taskDragEnd);
-//     newTask.addEventListener("click", this.taskClick);
-
-//     parentList.appendChild(newTask);
-
-//     return newTask;
-//   }
-// }

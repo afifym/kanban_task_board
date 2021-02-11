@@ -1,39 +1,38 @@
 // --------------------------------------
 // Variables, Constants
 // --------------------------------------
+const colors = ["#215B60", "#92D546", "#F4E12A", "#F6892F", "#EA4445"];
+
 const board = document.querySelector("#board");
 const divider = document.createElement("div");
 const modalContainer = document.querySelector(".task-modal-container");
 const listContainers = document.querySelectorAll(".task-list-container");
 const addBtns = document.querySelectorAll(".add-btn-container");
 divider.classList.add("divider");
-let prevCard = null;
-let lastPrevCard = null;
+let itemOrList = null;
+let lastItemOrList = null;
 let modalId = undefined;
 // --------------------------------------
 // Utility Functions
 // --------------------------------------
 
 // V
-function getprevCard(taskList, y) {
-  const listTasks = [
-    ...taskList.querySelectorAll(".task-item:not(.task-dragging)"),
-  ];
-  let offset = 0;
-  prevCard = null;
+function getItemOrList(list, y) {
+  const items = [...list.querySelectorAll(".task-item:not(.task-dragging)")];
+  let itemOrList = null;
 
-  listTasks.forEach((task) => {
-    const box = task.getBoundingClientRect();
-    offset = y - box.top - box.height / 2;
+  items.forEach((item) => {
+    const box = item.getBoundingClientRect();
+    let offset = y - box.top - box.height / 2;
 
     if (offset > 0) {
-      prevCard = task;
+      itemOrList = item;
     }
   });
 
-  if (prevCard == null) prevCard = taskList;
+  if (itemOrList == null) itemOrList = list;
 
-  return prevCard;
+  return itemOrList;
 }
 
 // --------------------------------------
@@ -44,25 +43,13 @@ modalContainer.querySelector(".task-modal").addEventListener("click", (e) => {
   e.stopPropagation();
 });
 
-// Controller
-const addNewTask = (list) => {
-  // Update Model
-  const newTask = new Task();
-  newTask.list = list;
-
-  // Update View
-  newTask.render();
-
-  return newTask.elem;
-};
-
 addBtns.forEach((btn) => {
   btn.addEventListener("click", (e) => {
-    const newElem = addNewTask(
+    const newTask = addNewTask(
       parseInt(e.target.parentElement.dataset.listnum)
     );
     taskTitleInput.value = "";
-    newElem.appendChild(taskTitleInput);
+    newTask.elem.appendChild(taskTitleInput);
     taskTitleInput.focus();
   });
 });
@@ -101,16 +88,16 @@ board.addEventListener("dragover", (e) => {
   if (elem != null && elem.classList.contains("task-list-container")) {
     let insideList = elem.querySelector(".task-list");
 
-    let prevCard = getprevCard(insideList, e.clientY);
+    itemOrList = getItemOrList(insideList, e.clientY);
 
-    if (lastPrevCard != prevCard) {
-      if (prevCard == insideList) {
+    if (lastItemOrList != itemOrList) {
+      if (itemOrList == insideList) {
         insideList.prepend(divider);
       } else {
-        prevCard.parentElement.insertBefore(divider, prevCard.nextSibling);
+        itemOrList.parentElement.insertBefore(divider, itemOrList.nextSibling);
       }
 
-      lastPrevCard = prevCard;
+      lastItemOrList = itemOrList;
     }
   }
 });
@@ -122,16 +109,6 @@ board.addEventListener("dragover", (e) => {
 const taskTitleInput = document.createElement("input");
 taskTitleInput.classList.add("task-title-input");
 taskTitleInput.placeholder = "New task";
-
-// controller
-const addNewName = (id, name) => {
-  // Update the Model
-  const task = Task.allTasks.find((t) => t.id === id);
-  task.name = name ? name : "New task";
-
-  // Update the view
-  task.render();
-};
 
 taskTitleInput.addEventListener("click", (e) => {
   e.stopPropagation();
@@ -153,6 +130,7 @@ taskTitleInput.addEventListener("keypress", (e) => {
 
 const task = new Task("Working");
 task.render();
+task.renderProgress();
 
 // const taskTemplate = document.querySelector('script[data-template="task"]')
 //   .innerHTML;
@@ -163,7 +141,13 @@ logoBtn.addEventListener("click", () => {
   document.body.classList.toggle("dark-mode");
 });
 
-const colors = ["#215B60", "#92D546", "#F4E12A", "#F6892F", "#EA4445"];
+const colorElems = document.querySelectorAll(
+  ".form-accent label:not(.item-label)"
+);
+
+for (let i = 0; i < colors.length; i++) {
+  colorElems[i].setAttribute("style", `background-color: ${colors[i]}`);
+}
 
 const modalForm = document.querySelector(".task-modal form");
 
@@ -172,9 +156,9 @@ modalForm.addEventListener("submit", function (e) {
   const updates = {
     name: this.name.value,
     type: this.type.value,
-    bg: colors[parseInt(this.bg.value)],
-    ac: colors[parseInt(this.accent.value)],
+    acIndex: parseInt(this.accent.value),
     deadline: this.deadline.value,
+    progress: this.progress.value / 100,
   };
 
   // Controller
@@ -182,18 +166,3 @@ modalForm.addEventListener("submit", function (e) {
 
   modalContainer.classList.remove("modal-active");
 });
-
-function updateTask(id, updates) {
-  // Update Model
-  const task = Task.allTasks.find((t) => t.id === id);
-  const { name, type, bg, ac, deadline } = updates;
-
-  task.name = name;
-  task.type = type;
-  task.bg = bg;
-  task.ac = ac;
-  task.deadline = deadline;
-
-  // Update View
-  task.render();
-}

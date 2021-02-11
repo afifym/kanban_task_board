@@ -56,6 +56,15 @@
                 />
               </svg>
             </div>
+            <!-- <div class="popview">
+              <form action="">
+                <div class="form-item">
+                  <label for="lname">Name</label>
+                  <input type="text" name="lname" id="lname" />
+                </div>
+                <div class="form-item"></div>
+              </form>
+            </div> -->
             <div class="task-list-popup">
               <form action="">
                 <div class="form-input-container">
@@ -316,7 +325,6 @@
     <div class="task-modal-container">
       <div class="task-modal">
         <h4 id="title" class="modal-title">Working</h4>
-
         <form action="">
           <!-- ITEM -->
           <article class="form-item form-name">
@@ -355,35 +363,6 @@
             </ul>
           </article>
           <!-- ITEM -->
-          <article class="form-item form-bg">
-            <label class="item-label">Background</label>
-            <ul class="inputs-list">
-              <!-- ITEM -->
-              <li class="input-item">
-                <input name="bg" type="radio" id="red" value="0" />
-                <label for="red" class="red"></label>
-              </li>
-              <!-- ITEM -->
-              <li class="input-item">
-                <input name="bg" type="radio" id="green" value="1" />
-                <label for="green" class="green"></label>
-              </li>
-              <!-- ITEM -->
-              <li class="input-item">
-                <input name="bg" type="radio" id="blue" value="2" />
-                <label for="blue" class="blue"></label>
-              </li>
-              <li class="input-item">
-                <input name="bg" type="radio" id="purple" value="3" />
-                <label for="purple" class="purple"></label>
-              </li>
-              <li class="input-item">
-                <input name="bg" type="radio" id="pink" value="4" />
-                <label for="pink" class="pink"></label>
-              </li>
-            </ul>
-          </article>
-          <!-- ITEM -->
           <article class="form-item form-accent">
             <label class="item-label">Accent</label>
             <ul class="inputs-list">
@@ -417,7 +396,11 @@
             <label for="deadline" class="item-label">Deadline</label>
             <input type="date" id="deadline" />
           </article>
-
+          <!-- ITEM -->
+          <article class="form-item form-progress">
+            <label for="progress" class="item-label">Progress</label>
+            <input type="range" min="0" max="100" id="progress" />
+          </article>
           <!-- BUTTON -->
           <button class="form-btn" type="submit">Change</button>
         </form>
@@ -430,6 +413,7 @@
       </li>
     </script>
 
+    <script src="js/controller.js"></script>
     <script src="js/classes.js"></script>
     <script src="./js/app.js"></script>
   </body>

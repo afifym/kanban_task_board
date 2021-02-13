@@ -1,6 +1,6 @@
-// --------------------------------------
-// Variables, Constants
-// --------------------------------------
+// #########################
+// VARIABLES_AND_CONSTANTS
+// #########################
 const colors = ["#215B60", "#92D546", "#F4E12A", "#F6892F", "#EA4445"];
 const lColors = ["#AB4D72", "#4E5B9F", "#CD9F63", "#0DC378"];
 
@@ -14,11 +14,12 @@ divider.classList.add("divider");
 let itemOrList = null;
 let lastItemOrList = null;
 let modalId = undefined;
-// --------------------------------------
-// Utility Functions
-// --------------------------------------
 
-// V
+// #########################
+// FUNCTIONS
+// #########################
+
+// DRAGnDROP
 function getItemOrList(list, y) {
   const items = [...list.querySelectorAll(".task-item:not(.task-dragging)")];
   let itemOrList = null;
@@ -37,14 +38,12 @@ function getItemOrList(list, y) {
   return itemOrList;
 }
 
-// --------------------------------------
-// Events
-// --------------------------------------
-
+// MODAL
 modalContainer.querySelector(".task-modal").addEventListener("click", (e) => {
   e.stopPropagation();
 });
 
+// ADD_BTN
 addBtns.forEach((btn) => {
   btn.addEventListener("click", (e) => {
     const newTask = addNewTask(
@@ -56,6 +55,7 @@ addBtns.forEach((btn) => {
   });
 });
 
+// MODAL
 document.addEventListener("click", (e) => {
   e.stopPropagation();
   if (modalContainer.classList.contains("modal-active")) {
@@ -81,6 +81,7 @@ document.addEventListener("click", (e) => {
   });
 });
 
+// DRANGnDROP
 board.addEventListener("dragover", (e) => {
   e.preventDefault();
 
@@ -122,17 +123,10 @@ board.addEventListener("dragover", (e) => {
   }
 });
 
-// --------------------------------------
-// end
-// --------------------------------------
-
-// --------------------------------------
 // TITLE_INPUT
-// --------------------------------------
-
 const taskTitleInput = document.createElement("input");
 taskTitleInput.classList.add("task-title-input");
-taskTitleInput.placeholder = "New task";
+taskTitleInput.placeholder = "new task";
 
 taskTitleInput.addEventListener("click", (e) => {
   e.stopPropagation();
@@ -149,19 +143,17 @@ taskTitleInput.addEventListener("blur", (e) => {
 });
 
 taskTitleInput.addEventListener("keypress", (e) => {
-  if (e.keyCode == 13) addNewName(e);
+  if (e.keyCode == 13) e.target.blur();
 });
 
-// --------------------------------------
 // LOGO_BTN
-// --------------------------------------
-
 const logoBtn = document.querySelector(".logo-btn");
 
 logoBtn.addEventListener("click", () => {
   document.body.classList.toggle("dark-mode");
 });
 
+// COLORS => MODAL ACCENT
 const colorElems = document.querySelectorAll(
   ".task-form .form-accent label:not(.item-label)"
 );
@@ -170,10 +162,7 @@ for (let i = 0; i < colors.length; i++) {
   colorElems[i].setAttribute("style", `background-color: ${colors[i]}`);
 }
 
-// --------------------------------------
-// MODAL
-// --------------------------------------
-
+// MODAL_SUBMIT => TASK UPDATE
 const modalForm = document.querySelector(".task-modal form");
 modalForm.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -191,43 +180,41 @@ modalForm.addEventListener("submit", function (e) {
   modalContainer.classList.remove("modal-active");
 });
 
-// --------------------------------------
-// LIST SETTINGS
-// --------------------------------------
+// LISTS_DATA
 const lists = [
   {
     id: 0,
     name: "Not Started",
     acIndex: 0,
+    nTasks: 1,
   },
   {
     id: 1,
     name: "Next Up",
     acIndex: 1,
+    nTasks: 1,
   },
   {
     id: 2,
     name: "In Progress",
     acIndex: 2,
+    nTasks: 1,
   },
   {
     id: 3,
     name: "Completed",
     acIndex: 3,
+    nTasks: 1,
   },
 ];
 
-function getForm(id) {
-  return lists.find((t) => t.id === id);
-}
-
-// VIEW
-
+// SETTINGS_BTN => CLICK_EVENT
 const settings = document.querySelectorAll(".task-list-settings");
 settings.forEach((setting) => {
   setting.addEventListener("click", showPopView);
 });
 
+// POPVIEW
 const popviews = document.querySelectorAll(".popview");
 popviews.forEach((popview) => {
   // NAME INPUT
@@ -262,16 +249,6 @@ popviews.forEach((popview) => {
   });
 });
 
-// UPATE ACCENT LABELS
-const listFormAccent = document.querySelectorAll(".list-form .form-accent");
-listFormAccent.forEach((form) => {
-  let i = 0;
-  form.querySelectorAll("label:not(.item-label)").forEach((elem) => {
-    elem.setAttribute("style", `background-color: ${lColors[i]}`);
-    i++;
-  });
-});
-
 function showPopView(e) {
   e.stopPropagation();
   const listID = parseInt(
@@ -282,10 +259,18 @@ function showPopView(e) {
   const form = getForm(
     parseInt(e.target.parentElement.parentElement.dataset.listnum)
   );
+
   e.target.nextElementSibling.classList.toggle("popview-active");
-
   formElem.lname.value = e.target.parentElement.firstElementChild.innerHTML;
-  // formElem.laccent.value = form.acIndex;
-
   formElem[`laccent${listID}`].value = form.acIndex;
 }
+
+// UPATE_ACCENT_LABELS
+const listFormAccent = document.querySelectorAll(".list-form .form-accent");
+listFormAccent.forEach((form) => {
+  let i = 0;
+  form.querySelectorAll("label:not(.item-label)").forEach((elem) => {
+    elem.setAttribute("style", `background-color: ${lColors[i]}`);
+    i++;
+  });
+});

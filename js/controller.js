@@ -37,6 +37,9 @@ const tasksData = [
   },
 ];
 
+// #########################
+// TASK_MODEL
+// #########################
 function getTask(id) {
   return Task.allTasks.find((t) => t.id === id);
 }
@@ -44,8 +47,11 @@ function getTask(id) {
 // Controller
 const addNewTask = (list) => {
   // Update Model
+  lists[list].nTasks++;
   const newTask = new Task();
   newTask.list = list;
+  newTask.type = "task";
+  newTask.order = lists[list].nTasks;
 
   // Update View
   newTask.render();
@@ -53,18 +59,16 @@ const addNewTask = (list) => {
   return newTask;
 };
 
-// controller
 const addNewName = (id, name) => {
   // Update the Model
   const task = getTask(id);
-  task.name = name ? name : "New task";
+  task.name = name ? name : "new task";
 
   // Update the view
   task.render();
   task.renderProgress();
 };
 
-// Controller
 function updateTask(id, updates) {
   // Update The Model
   const task = getTask(id);
@@ -107,6 +111,12 @@ function updateModal(id) {
   modalForm.progress.value = task.progress * 100;
 }
 
+function renderTasks(tasks) {
+  tasks.forEach((task) => {
+    task.render();
+  });
+}
+
 function createTasks(tasksData) {
   tasksData.forEach((item) => {
     let { name, type, progress, deadline, list, order, acIndex } = item;
@@ -119,8 +129,6 @@ function createTasks(tasksData) {
 
 createTasks(tasksData);
 
-function renderTasks(tasks) {
-  tasks.forEach((task) => {
-    task.render();
-  });
+function getForm(id) {
+  return lists.find((t) => t.id === id);
 }

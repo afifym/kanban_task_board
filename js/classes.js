@@ -1,22 +1,18 @@
-// --------------------------------------
-// Only For Dynamic Elements
-// --------------------------------------
-
-// --------------------------------------
-// TASK
-// --------------------------------------
+// #########################
+// TASK_MODEL
+// #########################
 class Task {
   static lastID = 0;
   static allTasks = [];
 
   constructor(
     name = "",
-    type = "habit",
+    type = "task",
     progress = 0.0,
     deadline = null,
     list = 0,
     order = 0,
-    acIndex = 2
+    acIndex = 0
   ) {
     this.id = Task.lastID;
     this.name = name;
@@ -57,15 +53,14 @@ class Task {
     this.elemType.classList.add("type-icon");
 
     this.elem.appendChild(this.elemType);
-    // this.elemName.insertAdjacentElement(this.elemProg);
   }
   renderProgress() {
     this.elem.appendChild(this.elemProg);
     this.elemProgInner.setAttribute("style", `width: ${this.progress * 100}%`);
   }
-  // ---------
+  // #########################
   // VIEW
-  // ---------
+  // #########################
   onDragStart(e) {
     e.target.classList.add("task-dragging");
     e.dataTransfer.setData("text", 1);
@@ -91,7 +86,6 @@ class Task {
         list: parseInt(itemOrList.parentElement.dataset.listnum),
       });
     } else if (itemOrList.classList.contains("task-item")) {
-      // START ------------------------
       const toChange = [];
 
       nextSibling = itemOrList.nextElementSibling;
@@ -128,12 +122,6 @@ class Task {
   }
 
   render() {
-    // if (this.list === 3) {
-    //   this.elem.classList.add("task-complete");
-    // } else {
-    //   this.elem.classList.remove("task-complete");
-    // }
-
     this.elemName.innerHTML = this.name;
     this.elem.setAttribute(
       "style",
@@ -143,7 +131,6 @@ class Task {
     if (this.type === "task") {
       this.elemType.innerHTML = '<i class="fas fa-hammer"></i>';
       this.elemType.className = `type-icon task`;
-      // this.elemType.classList.add("type-icon", "task");
     } else if (this.type === "bug") {
       this.elemType.innerHTML = '<i class="fas fa-bug"></i>';
       this.elemType.className = `type-icon bug`;
@@ -158,28 +145,4 @@ class Task {
 
     list.insertBefore(this.elem, list.children[this.order + 1]);
   }
-}
-
-function luminance(hex) {
-  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, function (m, r, g, b) {
-    return r + r + g + g + b + b;
-  });
-
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-
-  const rgb = result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null;
-
-  const { r, g, b } = rgb;
-  var a = [r, g, b].map(function (v) {
-    v /= 255;
-    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-  });
-  return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
 }

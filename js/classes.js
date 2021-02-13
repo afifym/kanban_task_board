@@ -53,6 +53,10 @@ class Task {
     this.elemProg.appendChild(this.elemProgInner);
     this.elem.appendChild(this.elemName);
 
+    this.elemType = document.createElement("span");
+    this.elemType.classList.add("type-icon");
+
+    this.elem.appendChild(this.elemType);
     // this.elemName.insertAdjacentElement(this.elemProg);
   }
   renderProgress() {
@@ -71,10 +75,10 @@ class Task {
     divider.remove();
     e.target.classList.remove("task-dragging");
 
-    let nextSibling = e.target.nextSibling;
+    let nextSibling = e.target.nextElementSibling;
     while (nextSibling) {
       decrementOrder(parseInt(nextSibling.dataset.taskid));
-      nextSibling = nextSibling.nextSibling;
+      nextSibling = nextSibling.nextElementSibling;
     }
 
     if (itemOrList.classList.contains("task-list")) {
@@ -86,25 +90,31 @@ class Task {
         order: 0,
         list: parseInt(itemOrList.parentElement.dataset.listnum),
       });
-      // ----------------
     } else if (itemOrList.classList.contains("task-item")) {
+      // START ------------------------
+      const toChange = [];
+
+      nextSibling = itemOrList.nextElementSibling;
+      while (nextSibling) {
+        toChange.push(parseInt(nextSibling.dataset.taskid));
+        nextSibling = nextSibling.nextElementSibling;
+      }
+
+      toChange.forEach((id) => {
+        incrementOrder(id);
+      });
+
       const currentOrder = getPropertyValue(
         parseInt(itemOrList.dataset.taskid),
         "order"
       );
 
-      itemOrList.parentElement.insertBefore(e.target, itemOrList.nextSibling);
-
-      nextSibling = itemOrList.nextSibling;
-      while (nextSibling) {
-        incrementOrder(parseInt(nextSibling.dataset.taskid));
-        nextSibling = nextSibling.nextSibling;
-      }
-
       updateTask(parseInt(this.dataset.taskid), {
         order: currentOrder + 1,
         list: parseInt(itemOrList.parentElement.parentElement.dataset.listnum),
       });
+
+      itemOrList.parentElement.insertBefore(e.target, itemOrList.nextSibling);
     }
   }
 
@@ -118,11 +128,29 @@ class Task {
   }
 
   render() {
+    // if (this.list === 3) {
+    //   this.elem.classList.add("task-complete");
+    // } else {
+    //   this.elem.classList.remove("task-complete");
+    // }
+
     this.elemName.innerHTML = this.name;
     this.elem.setAttribute(
       "style",
       `border-left-color: ${colors[this.acIndex]};`
     );
+
+    if (this.type === "task") {
+      this.elemType.innerHTML = '<i class="fas fa-hammer"></i>';
+      this.elemType.className = `type-icon task`;
+      // this.elemType.classList.add("type-icon", "task");
+    } else if (this.type === "bug") {
+      this.elemType.innerHTML = '<i class="fas fa-bug"></i>';
+      this.elemType.className = `type-icon bug`;
+    } else if (this.type === "epic") {
+      this.elemType.innerHTML = '<i class="fas fa-mountain"></i>';
+      this.elemType.className = `type-icon epic`;
+    }
 
     const list = document
       .querySelector(`[data-listnum="${this.list}"]`)

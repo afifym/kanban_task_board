@@ -2,12 +2,14 @@
 // Variables, Constants
 // --------------------------------------
 const colors = ["#215B60", "#92D546", "#F4E12A", "#F6892F", "#EA4445"];
+const lColors = ["#AB4D72", "#4E5B9F", "#CD9F63", "#0DC378"];
 
 const board = document.querySelector("#board");
 const divider = document.createElement("div");
 const modalContainer = document.querySelector(".task-modal-container");
 const listContainers = document.querySelectorAll(".task-list-container");
 const addBtns = document.querySelectorAll(".add-btn-container");
+
 divider.classList.add("divider");
 let itemOrList = null;
 let lastItemOrList = null;
@@ -57,8 +59,26 @@ addBtns.forEach((btn) => {
 document.addEventListener("click", (e) => {
   e.stopPropagation();
   if (modalContainer.classList.contains("modal-active")) {
+    const taskForm = modalContainer.querySelector(".task-form");
+    const updates = {
+      name: taskForm.name.value,
+      type: taskForm.type.value,
+      acIndex: parseInt(taskForm.accent.value),
+      deadline: taskForm.deadline.value,
+      progress: taskForm.progress.value / 100,
+    };
+
+    // Controller
+    updateTask(modalId, updates);
+
     modalContainer.classList.remove("modal-active");
   }
+
+  popviews.forEach((elem) => {
+    if (elem.classList.contains("popview-active")) {
+      elem.classList.remove("popview-active");
+    }
+  });
 });
 
 board.addEventListener("dragover", (e) => {
@@ -106,6 +126,10 @@ board.addEventListener("dragover", (e) => {
 // end
 // --------------------------------------
 
+// --------------------------------------
+// TITLE_INPUT
+// --------------------------------------
+
 const taskTitleInput = document.createElement("input");
 taskTitleInput.classList.add("task-title-input");
 taskTitleInput.placeholder = "New task";
@@ -128,25 +152,9 @@ taskTitleInput.addEventListener("keypress", (e) => {
   if (e.keyCode == 13) addNewName(e);
 });
 
-let task;
-task = new Task("This", "habit", 0, "2021-02-10", 0, 0, 4);
-task.render();
-task.renderProgress();
-
-task = new Task("is", "long-term", 0, "2021-02-10", 1, 0, 0);
-task.render();
-task.renderProgress();
-
-task = new Task("a Kanban", "short-term", 0.7, "2021-02-10", 2, 0, 3);
-task.render();
-task.renderProgress();
-
-task = new Task("Board", "habit", 1, "2021-02-10", 3, 0, 1);
-task.render();
-task.renderProgress();
-
-// const taskTemplate = document.querySelector('script[data-template="task"]')
-//   .innerHTML;
+// --------------------------------------
+// LOGO_BTN
+// --------------------------------------
 
 const logoBtn = document.querySelector(".logo-btn");
 
@@ -155,15 +163,18 @@ logoBtn.addEventListener("click", () => {
 });
 
 const colorElems = document.querySelectorAll(
-  ".form-accent label:not(.item-label)"
+  ".task-form .form-accent label:not(.item-label)"
 );
 
 for (let i = 0; i < colors.length; i++) {
   colorElems[i].setAttribute("style", `background-color: ${colors[i]}`);
 }
 
-const modalForm = document.querySelector(".task-modal form");
+// --------------------------------------
+// MODAL
+// --------------------------------------
 
+const modalForm = document.querySelector(".task-modal form");
 modalForm.addEventListener("submit", function (e) {
   e.preventDefault();
   const updates = {
@@ -179,3 +190,102 @@ modalForm.addEventListener("submit", function (e) {
 
   modalContainer.classList.remove("modal-active");
 });
+
+// --------------------------------------
+// LIST SETTINGS
+// --------------------------------------
+const lists = [
+  {
+    id: 0,
+    name: "Not Started",
+    acIndex: 0,
+  },
+  {
+    id: 1,
+    name: "Next Up",
+    acIndex: 1,
+  },
+  {
+    id: 2,
+    name: "In Progress",
+    acIndex: 2,
+  },
+  {
+    id: 3,
+    name: "Completed",
+    acIndex: 3,
+  },
+];
+
+function getForm(id) {
+  return lists.find((t) => t.id === id);
+}
+
+// VIEW
+
+const settings = document.querySelectorAll(".task-list-settings");
+settings.forEach((setting) => {
+  setting.addEventListener("click", showPopView);
+});
+
+const popviews = document.querySelectorAll(".popview");
+popviews.forEach((popview) => {
+  // NAME INPUT
+  const popNameInput = popview.querySelector(".list-form .form-name input");
+  popNameInput.addEventListener("input", (e) => {
+    e.target
+      .closest(".task-list-container")
+      .querySelector(".task-list-title").innerHTML = e.target.value;
+  });
+
+  // ACCENT INPUT
+  const popAccentInputs = popview.querySelectorAll(".form-accent input");
+  popAccentInputs.forEach((acInput) => {
+    acInput.addEventListener("input", (e) => {
+      const listID = e.target.closest(".task-list-container").dataset.listnum;
+      getForm(parseInt(listID)).acIndex = e.target.value;
+
+      e.target
+        .closest(".task-list-container")
+        .setAttribute("style", `border-top-color: ${lColors[e.target.value]}`);
+    });
+  });
+
+  // CLICK
+  popview.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+
+  // SUBMIT
+  popview.querySelector("form").addEventListener("submit", (e) => {
+    e.preventDefault();
+  });
+});
+
+// UPATE ACCENT LABELS
+const listFormAccent = document.querySelectorAll(".list-form .form-accent");
+listFormAccent.forEach((form) => {
+  let i = 0;
+  form.querySelectorAll("label:not(.item-label)").forEach((elem) => {
+    elem.setAttribute("style", `background-color: ${lColors[i]}`);
+    i++;
+  });
+});
+
+function showPopView(e) {
+  e.stopPropagation();
+  const listID = parseInt(
+    e.target.closest(".task-list-container").dataset.listnum
+  );
+
+  const formElem = e.target.nextElementSibling.firstElementChild;
+  const form = getForm(
+    parseInt(e.target.parentElement.parentElement.dataset.listnum)
+  );
+  e.target.nextElementSibling.classList.toggle("popview-active");
+
+  formElem.lname.value = e.target.parentElement.firstElementChild.innerHTML;
+  // formElem.laccent.value = form.acIndex;
+
+  formElem[`laccent${listID}`].value = form.acIndex;
+}

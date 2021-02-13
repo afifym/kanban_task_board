@@ -1,3 +1,42 @@
+const tasksData = [
+  {
+    name: "This",
+    type: "task",
+    progress: 0,
+    deadline: "2021-02-10",
+    list: 0,
+    order: 0,
+    acIndex: 4,
+  },
+  {
+    name: "is",
+    type: "bug",
+    progress: 0,
+    deadline: "2021-02-10",
+    list: 1,
+    order: 0,
+    acIndex: 0,
+  },
+  {
+    name: "a Kanban",
+    type: "epic",
+    progress: 0.7,
+    deadline: "2021-02-10",
+    list: 2,
+    order: 0,
+    acIndex: 3,
+  },
+  {
+    name: "Board",
+    type: "task",
+    progress: 1,
+    deadline: "2021-02-10",
+    list: 3,
+    order: 0,
+    acIndex: 1,
+  },
+];
+
 function getTask(id) {
   return Task.allTasks.find((t) => t.id === id);
 }
@@ -66,4 +105,22 @@ function updateModal(id) {
   modalForm.accent.value = task.acIndex;
   modalForm.deadline.value = task.deadline;
   modalForm.progress.value = task.progress * 100;
+}
+
+function createTasks(tasksData) {
+  tasksData.forEach((item) => {
+    let { name, type, progress, deadline, list, order, acIndex } = item;
+    let task = new Task(name, type, progress, deadline, list, order, acIndex);
+
+    task.render();
+    task.renderProgress();
+  });
+}
+
+createTasks(tasksData);
+
+function renderTasks(tasks) {
+  tasks.forEach((task) => {
+    task.render();
+  });
 }

@@ -145,12 +145,8 @@ body.dark-mode .task-list-container .task-list-title {
   color: white !important;
 }
 
-body.dark-mode .task-list-container .icon-container svg rect {
-  fill: white;
-}
-
-body.dark-mode .task-list-container .icon-container svg circle {
-  stroke: white;
+body.dark-mode .task-list-container .icon-container i {
+  color: white !important;
 }
 
 body.dark-mode .task-list-container .add-task-btn {
@@ -362,6 +358,8 @@ body.dark-mode .task-list-container .add-task-btn {
 #board .task-list-container .add-icon {
   color: #464646;
   pointer-events: none;
+  font-weight: bold;
+  opacity: 0.7;
 }
 
 #board .task-list {

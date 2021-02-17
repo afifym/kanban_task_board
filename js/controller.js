@@ -156,14 +156,7 @@ function updateProgress(id, progress) {
   const task = getTask(id);
   task.progress = progress;
 
-  // task.elemProgInner.setAttribute("style", `width: ${progress * 100}%`);
-  // task.elemProgInner.setAttribute(
-  //   "style",
-  //   `transform: translateX(${100 - 100 * progress}%)`
-  // );
-
   task.elemProgInner.className = `task-prog-green prog-${progress * 100}`;
-  console.log(progress);
 
   localStorage.setItem("tasksData", JSON.stringify(Task.allTasks));
 }

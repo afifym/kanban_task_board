@@ -89,6 +89,7 @@ class Task {
     e.stopPropagation();
     const progress = parseInt(e.target.dataset.num) / 4;
     const taskID = parseInt(e.target.closest(".task-item").dataset.taskid);
+
     updateProgress(taskID, progress);
   }
 
@@ -175,7 +176,12 @@ class Task {
 
   renderProgress() {
     this.elem.appendChild(this.elemProg);
-    this.elemProgInner.setAttribute("style", `width: ${this.progress * 100}%`);
+
+    this.elemProgInner.className = `task-prog-green prog-${
+      this.progress * 100
+    }`;
+
+    // this.elemProgInner.setAttribute("style", `width: ${this.progress * 100}%`);
   }
 
   render() {

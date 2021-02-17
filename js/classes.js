@@ -1,3 +1,7 @@
+const tickHover = (e) => {
+  console.log("tick hover");
+};
+
 // #########################
 // TASK_MODEL
 // #########################
@@ -36,12 +40,25 @@ class Task {
     this.elem.addEventListener("dragstart", this.onDragStart);
     this.elem.addEventListener("dragend", this.onDragEnd);
     this.elem.addEventListener("click", this.onClick);
+    this.elem.addEventListener("mouseenter", this.onHover);
+    this.elem.addEventListener("mouseleave", this.onUnHover);
+    this.elem.addEventListener("mouseover", this.onMouseOver);
 
     this.elemName = document.createElement("h5");
     this.elemName.classList.add("task-name");
 
     this.elemProg = document.createElement("div");
+    this.elemProg.addEventListener("click", this.onClickProgress);
     this.elemProgInner = document.createElement("div");
+
+    const progTicks = document.createElement("div");
+    progTicks.classList.add("prog-ticks");
+    this.elemProg.appendChild(progTicks);
+    for (let i = 0; i < 5; i++) {
+      let newSpan = document.createElement("span");
+      newSpan.dataset.num = i;
+      progTicks.appendChild(newSpan);
+    }
 
     this.elemProg.classList.add("task-prog-gray");
     this.elemProgInner.classList.add("task-prog-green");
@@ -66,6 +83,21 @@ class Task {
       "draggedID",
       parseInt(e.target.closest(".task-item").dataset.taskid)
     );
+  }
+
+  onClickProgress(e) {
+    e.stopPropagation();
+    const progress = parseInt(e.target.dataset.num) / 4;
+    const taskID = parseInt(e.target.closest(".task-item").dataset.taskid);
+    updateProgress(taskID, progress);
+  }
+
+  onHover(e) {
+    e.target.querySelector(".task-prog-gray").classList.add("prog-active");
+  }
+
+  onUnHover(e) {
+    e.target.querySelector(".task-prog-gray").classList.remove("prog-active");
   }
 
   onDragEnd(e) {

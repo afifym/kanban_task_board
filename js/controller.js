@@ -115,7 +115,7 @@ function updateModal(id) {
   modalForm.type.value = task.type;
   modalForm.accent.value = task.acIndex;
   modalForm.deadline.value = task.deadline;
-  modalForm.progress.value = task.progress * 100;
+  // modalForm.progress.value = task.progress * 100;
 }
 
 function renderTasks(tasks) {
@@ -149,5 +149,13 @@ function deleteTask(id) {
   taskToDelete.elem.remove();
 
   Task.allTasks = Task.allTasks.filter((task) => task.id !== id);
+  localStorage.setItem("tasksData", JSON.stringify(Task.allTasks));
+}
+
+function updateProgress(id, progress) {
+  const task = getTask(id);
+  task.progress = progress;
+
+  task.elemProgInner.setAttribute("style", `width: ${progress * 100}%`);
   localStorage.setItem("tasksData", JSON.stringify(Task.allTasks));
 }

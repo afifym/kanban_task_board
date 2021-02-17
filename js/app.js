@@ -70,7 +70,7 @@ document.addEventListener("click", (e) => {
       type: taskForm.type.value,
       acIndex: parseInt(taskForm.accent.value),
       deadline: taskForm.deadline.value,
-      progress: taskForm.progress.value / 100,
+      // progress: taskForm.progress.value / 100,
     };
 
     // Controller
@@ -330,14 +330,14 @@ taskAccentInputs.forEach((accentInput) => {
   });
 });
 
-const taskProgressInput = modalForm.querySelector(".form-progress input");
-taskProgressInput.addEventListener("input", (e) => {
-  const taskElem = document.querySelector(
-    `.task-item[data-taskid='${modalId}'] .task-prog-green`
-  );
+// const taskProgressInput = modalForm.querySelector(".form-progress input");
+// taskProgressInput.addEventListener("input", (e) => {
+//   const taskElem = document.querySelector(
+//     `.task-item[data-taskid='${modalId}'] .task-prog-green`
+//   );
 
-  taskElem.setAttribute("style", `width: ${e.target.value}%`);
-});
+//   taskElem.setAttribute("style", `width: ${e.target.value}%`);
+// });
 
 const deleteSector = document.querySelector("#delete .delete-inner");
 

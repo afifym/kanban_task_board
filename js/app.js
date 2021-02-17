@@ -59,7 +59,12 @@ addBtns.forEach((btn) => {
 document.addEventListener("click", (e) => {
   e.stopPropagation();
   if (modalContainer.classList.contains("modal-active")) {
+    document.querySelectorAll(".task-item").forEach((taskElem) => {
+      taskElem.classList.remove("task-active");
+    });
+
     const taskForm = modalContainer.querySelector(".task-form");
+    taskForm.submit;
     const updates = {
       name: taskForm.name.value,
       type: taskForm.type.value,
@@ -273,4 +278,82 @@ listFormAccent.forEach((form) => {
     elem.setAttribute("style", `background-color: ${lColors[i]}`);
     i++;
   });
+});
+
+// Animate Tasks Showing
+// modal from bottom
+
+// Interactive Form
+const taskNameInput = modalForm.querySelector(".form-name input");
+taskNameInput.addEventListener("input", (e) => {
+  const taskElemName = document.querySelector(
+    `.task-item[data-taskid='${modalId}'] .task-name`
+  );
+
+  taskElemName.innerHTML = e.target.value;
+});
+
+const taskTypeInputs = modalForm.querySelectorAll(".form-type input");
+taskTypeInputs.forEach((typeInput) => {
+  typeInput.addEventListener("input", (e) => {
+    const taskElemType = document.querySelector(
+      `.task-item[data-taskid='${modalId}'] .type-icon`
+    );
+
+    const selectedType = e.target.value;
+
+    if (selectedType === "task") {
+      taskElemType.innerHTML = '<i class="fas fa-hammer"></i>';
+      taskElemType.className = `type-icon task`;
+    } else if (selectedType === "bug") {
+      taskElemType.innerHTML = '<i class="fas fa-bug"></i>';
+      taskElemType.className = `type-icon bug`;
+    } else if (selectedType === "epic") {
+      taskElemType.innerHTML = '<i class="fas fa-mountain"></i>';
+      taskElemType.className = `type-icon epic`;
+    }
+  });
+});
+
+const taskAccentInputs = modalForm.querySelectorAll(".form-accent input");
+taskAccentInputs.forEach((accentInput) => {
+  accentInput.addEventListener("input", (e) => {
+    const selectedAccent = e.target.value;
+    const taskElem = document.querySelector(
+      `.task-item[data-taskid='${modalId}']`
+    );
+
+    taskElem.setAttribute(
+      "style",
+      `border-left-color: ${colors[selectedAccent]};`
+    );
+  });
+});
+
+const taskProgressInput = modalForm.querySelector(".form-progress input");
+taskProgressInput.addEventListener("input", (e) => {
+  const taskElem = document.querySelector(
+    `.task-item[data-taskid='${modalId}'] .task-prog-green`
+  );
+
+  taskElem.setAttribute("style", `width: ${e.target.value}%`);
+});
+
+const deleteSector = document.querySelector("#delete .delete-inner");
+
+deleteSector.addEventListener("dragover", (e) => {
+  e.preventDefault();
+});
+
+deleteSector.addEventListener("dragenter", (e) => {
+  e.target.classList.add("delete-active");
+});
+
+deleteSector.addEventListener("dragleave", (e) => {
+  e.target.classList.remove("delete-active");
+});
+
+deleteSector.addEventListener("drop", (e) => {
+  e.preventDefault();
+  deleteTask(parseInt(e.dataTransfer.getData("draggedID")));
 });

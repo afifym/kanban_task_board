@@ -54,71 +54,96 @@ class Task {
 
     this.elem.appendChild(this.elemType);
   }
-  renderProgress() {
-    this.elem.appendChild(this.elemProg);
-    this.elemProgInner.setAttribute("style", `width: ${this.progress * 100}%`);
-  }
+
   // #########################
   // VIEW
   // #########################
   onDragStart(e) {
+    deleteSector.classList.add("delete-semi-active");
+    modalContainer.classList.remove("modal-active");
     e.target.classList.add("task-dragging");
-    e.dataTransfer.setData("text", 1);
+    e.dataTransfer.setData(
+      "draggedID",
+      parseInt(e.target.closest(".task-item").dataset.taskid)
+    );
   }
 
   onDragEnd(e) {
     divider.remove();
     e.target.classList.remove("task-dragging");
+    deleteSector.classList.remove("delete-semi-active");
 
-    let nextSibling = e.target.nextElementSibling;
-    while (nextSibling) {
-      decrementOrder(parseInt(nextSibling.dataset.taskid));
-      nextSibling = nextSibling.nextElementSibling;
-    }
-
-    if (itemOrList.classList.contains("task-list")) {
-      [...itemOrList.children].forEach((itemElem) => {
-        incrementOrder(parseInt(itemElem.dataset.taskid));
-      });
-      itemOrList.prepend(e.target);
-      updateTask(parseInt(this.dataset.taskid), {
-        order: 0,
-        list: parseInt(itemOrList.parentElement.dataset.listnum),
-      });
-    } else if (itemOrList.classList.contains("task-item")) {
-      const toChange = [];
-
-      nextSibling = itemOrList.nextElementSibling;
+    if (deleteSector.classList.contains("delete-active")) {
+      deleteSector.classList.remove("delete-active");
+    } else {
+      let nextSibling = e.target.nextElementSibling;
       while (nextSibling) {
-        toChange.push(parseInt(nextSibling.dataset.taskid));
+        decrementOrder(parseInt(nextSibling.dataset.taskid));
         nextSibling = nextSibling.nextElementSibling;
       }
 
-      toChange.forEach((id) => {
-        incrementOrder(id);
-      });
+      if (itemOrList.classList.contains("task-list")) {
+        [...itemOrList.children].forEach((itemElem) => {
+          incrementOrder(parseInt(itemElem.dataset.taskid));
+        });
+        itemOrList.prepend(e.target);
+        updateTask(parseInt(this.dataset.taskid), {
+          order: 0,
+          list: parseInt(itemOrList.parentElement.dataset.listnum),
+        });
+      } else if (itemOrList.classList.contains("task-item")) {
+        const toChange = [];
 
-      const currentOrder = getPropertyValue(
-        parseInt(itemOrList.dataset.taskid),
-        "order"
-      );
+        nextSibling = itemOrList.nextElementSibling;
+        while (nextSibling) {
+          toChange.push(parseInt(nextSibling.dataset.taskid));
+          nextSibling = nextSibling.nextElementSibling;
+        }
 
-      updateTask(parseInt(this.dataset.taskid), {
-        order: currentOrder + 1,
-        list: parseInt(itemOrList.parentElement.parentElement.dataset.listnum),
-      });
+        toChange.forEach((id) => {
+          incrementOrder(id);
+        });
 
-      itemOrList.parentElement.insertBefore(e.target, itemOrList.nextSibling);
+        const currentOrder = getPropertyValue(
+          parseInt(itemOrList.dataset.taskid),
+          "order"
+        );
+
+        updateTask(parseInt(this.dataset.taskid), {
+          order: currentOrder + 1,
+          list: parseInt(
+            itemOrList.parentElement.parentElement.dataset.listnum
+          ),
+        });
+
+        itemOrList.parentElement.insertBefore(e.target, itemOrList.nextSibling);
+      }
     }
   }
 
   onClick(e) {
     e.stopPropagation();
-    updateModal(parseInt(this.dataset.taskid));
-    modalContainer.classList.add("modal-active");
-    modalContainer.querySelector(".task-modal").focus = true;
+    const clickedTask = e.target.closest(".task-item");
 
+    if (clickedTask.classList.contains("task-active")) {
+      clickedTask.classList.remove("task-active");
+      modalContainer.classList.remove("modal-active");
+    } else {
+      document.querySelectorAll(".task-item").forEach((taskElem) => {
+        taskElem.classList.remove("task-active");
+      });
+      modalContainer.classList.add("modal-active");
+      modalContainer.querySelector(".task-modal").focus = true;
+      clickedTask.classList.add("task-active");
+    }
+
+    updateModal(parseInt(this.dataset.taskid));
     modalId = parseInt(this.dataset.taskid);
+  }
+
+  renderProgress() {
+    this.elem.appendChild(this.elemProg);
+    this.elemProgInner.setAttribute("style", `width: ${this.progress * 100}%`);
   }
 
   render() {
@@ -144,5 +169,6 @@ class Task {
       .querySelector(".task-list");
 
     list.insertBefore(this.elem, list.children[this.order + 1]);
+    localStorage.setItem("tasksData", JSON.stringify(Task.allTasks));
   }
 }

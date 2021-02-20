@@ -110,12 +110,12 @@
             </div>
           </div>
           <ul class="task-list" draggable=""></ul>
-          <div class="add-btn-container">
+          <button class="add-btn-container" disabled>
             <div class="icon-container">
               <i class="fas fa-plus add-icon"></i>
             </div>
-            <button class="add-task-btn">Add task</button>
-          </div>
+            <div class="add-task-btn">Add task</div>
+          </button>
         </article>
         <!-- ARTICLE NEXT-UP -->
         <article class="task-list-container" data-listnum="1">
@@ -394,6 +394,8 @@
     <!-- MODAL -->
     <div class="task-modal-container">
       <div class="task-modal">
+        <div class="delete-btn"><i class="far fa-trash-alt"></i></div>
+
         <!-- <h4 id="title" class="modal-title">Working</h4> -->
         <form action="" class="task-form">
           <!-- ITEM -->
@@ -407,21 +409,24 @@
             <ul class="inputs-list">
               <!-- ITEM -->
               <li class="input-item">
-                <i class="fas fa-hammer"></i>
                 <input name="type" type="radio" id="task" value="task" />
-                <label class="input-label" for="task">task</label>
+                <label class="input-label" for="task"
+                  ><i class="fas fa-hammer"></i> task</label
+                >
               </li>
               <!-- ITEM -->
               <li class="input-item">
-                <i class="fas fa-bug"></i>
                 <input name="type" type="radio" id="bug" value="bug" />
-                <label class="input-label" for="bug">bug</label>
+                <label class="input-label" for="bug"
+                  ><i class="fas fa-bug icon"></i> bug</label
+                >
               </li>
               <!-- ITEM -->
               <li class="input-item">
-                <i class="fas fa-mountain"></i>
                 <input name="type" type="radio" id="epic" value="epic" />
-                <label class="input-label" for="epic">epic</label>
+                <label class="input-label" for="epic"
+                  ><i class="fas fa-mountain"></i> epic</label
+                >
               </li>
             </ul>
           </article>
@@ -479,8 +484,8 @@
       </li>
     </script>
 
-    <script src="js/classes.js"></script>
-    <script src="./js/app.js"></script>
-    <script src="js/controller.js"></script>
+    <script src="./js/model.js"></script>
+    <script src="./js/view.js"></script>
+    <script src="./js/controller.js"></script>
   </body>
 </html>

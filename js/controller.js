@@ -21,7 +21,7 @@ const tasksData = [
   {
     name: "a Kanban",
     type: "epic",
-    progress: 0.7,
+    progress: 0.5,
     deadline: "2021-02-10",
     list: 2,
     order: 0,

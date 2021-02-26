@@ -40,6 +40,8 @@ class Task {
     this.elem.classList.add("task-item");
     this.elem.addEventListener("dragstart", this.onDragStart);
     this.elem.addEventListener("dragend", this.onDragEnd);
+    this.elem.addEventListener("touchstart", this.onDragStart);
+    this.elem.addEventListener("touchend", this.onDragEnd);
     this.elem.addEventListener("click", this.onClick);
     this.elem.addEventListener("blur", this.onBlur);
 

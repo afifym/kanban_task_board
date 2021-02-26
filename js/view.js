@@ -39,6 +39,14 @@ let selectedTaskID = undefined;
   }
 
   board.addEventListener("dragover", (e) => {
+    onDragOver(e);
+  });
+
+  board.addEventListener("touchmove", (e) => {
+    onDragOver(e);
+  });
+
+  function onDragOver(e) {
     e.preventDefault();
 
     let elem = e.target;
@@ -80,7 +88,7 @@ let selectedTaskID = undefined;
         lastItemOrList = itemOrList;
       }
     }
-  });
+  }
 })();
 
 // ADD_BTN
@@ -159,9 +167,81 @@ let selectedTaskID = undefined;
   });
 })();
 
+(function () {
+  const popview = document.querySelector(".popview");
+  const settings = document.querySelectorAll(".task-list-settings");
+
+  popview.addEventListener("click", (e) => {
+    e.stopPropagation();
+    popview.classList.remove(".popview-active");
+  });
+
+  settings.forEach((setting) => {
+    setting.addEventListener("click", addShowPopview);
+  });
+
+  // Interactive
+  popview.querySelector(".form-name input").addEventListener("input", (e) => {
+    e.target
+      .closest(".task-list-container")
+      .querySelector(".task-list-title").innerHTML = e.target.value;
+
+    const listID = parseInt(e.target.closest(".popview").dataset.listid);
+    const listData = getList(listID);
+    listData.name = e.target.value;
+
+    localStorage.setItem("listsData", JSON.stringify(listsData));
+  });
+
+  // Interactive
+  popview.querySelectorAll(".form-accent input").forEach((acInput) => {
+    acInput.addEventListener("input", (e) => {
+      const listID = parseInt(e.target.closest(".popview").dataset.listid);
+
+      getForm(parseInt(listID)).acIndex = e.target.value;
+
+      e.target
+        .closest(".task-list-container")
+        .setAttribute("style", `border-top-color: ${lColors[e.target.value]}`);
+
+      const listData = getList(listID);
+      listData.acIndex = parseInt(e.target.value);
+
+      localStorage.setItem("listsData", JSON.stringify(listsData));
+    });
+  });
+
+  // SUBMIT
+  popview.querySelector("form").addEventListener("submit", (e) => {
+    e.preventDefault();
+  });
+
+  function addShowPopview(e) {
+    e.stopPropagation();
+    const listElem = e.target.closest(".task-list-container");
+    const listID = parseInt(listElem.dataset.listnum);
+    const popForm = popview.querySelector(".list-form");
+    const listData = getList(listID);
+
+    if (parseInt(popview.dataset.listid) === listID) {
+      popview.classList.toggle("popview-active");
+    } else {
+      popview.classList.remove("popview-active");
+      listElem.insertBefore(popview, e.target.nextElementSibling);
+      popview.dataset.listid = listID;
+
+      setTimeout(() => {
+        popview.classList.add("popview-active");
+      }, 5);
+    }
+
+    popForm.lname.value = listData.name;
+    popForm.laccent.value = listData.acIndex;
+  }
+})();
 // TODO: Update ListsData
 // Single Popview
-(function popviewsSetup() {
+function popviewsSetup() {
   const settings = document.querySelectorAll(".task-list-settings");
   settings.forEach((setting) => {
     setting.addEventListener("click", showPopView);
@@ -169,11 +249,14 @@ let selectedTaskID = undefined;
 
   function showPopView(e) {
     e.stopPropagation();
+    console.log("setting");
+    console.log(e.target);
+
     const listElem = e.target.closest(".task-list-container");
     const listID = parseInt(listElem.dataset.listnum);
     const listForm = listElem.querySelector(".list-form");
 
-    listElem.querySelector(".popview").classList.toggle("popview-active");
+    // listElem.querySelector(".popview").classList.toggle("popview-active");
 
     listForm.lname.value = listElem.querySelector(".task-list-title").innerHTML;
     listForm[`laccent${listID}`].value = getList(listID).acIndex;
@@ -215,7 +298,7 @@ let selectedTaskID = undefined;
       e.preventDefault();
     });
   });
-})();
+}
 
 (function populatePopviewsAccents() {
   const listFormAccent = document.querySelectorAll(".list-form .form-accent");
@@ -230,6 +313,7 @@ let selectedTaskID = undefined;
 
 (function documentEvents() {
   const modalContainer = document.querySelector(".task-modal-container");
+  const popview = document.querySelector(".popview");
 
   document.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -254,9 +338,7 @@ let selectedTaskID = undefined;
       updateTask(selectedTaskID, updates);
     }
 
-    document.querySelectorAll(".popview").forEach((elem) => {
-      elem.classList.remove("popview-active");
-    });
+    popview.classList.remove("popview-active");
   });
 })();
 

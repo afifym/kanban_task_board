@@ -3,6 +3,11 @@
 // #########################
 const colors = ["#215B60", "#92D546", "#F4E12A", "#F6892F", "#EA4445"];
 const lColors = ["#AB4D72", "#4E5B9F", "#CD9F63", "#0DC378"];
+const taskIcons = [
+  '<i class="fas fa-hammer"></i>',
+  '<i class="fas fa-bug"></i>',
+  '<i class="fas fa-mountain"></i>',
+];
 
 let itemOrList = null;
 let selectedTaskID = undefined;
@@ -159,7 +164,7 @@ let draggedTask = null;
   });
 })();
 
-(function () {
+(function popviewInteractions() {
   const popview = document.querySelector(".popview");
   const settings = document.querySelectorAll(".task-list-settings");
 
@@ -308,13 +313,13 @@ let draggedTask = null;
       const selectedType = e.target.value;
 
       if (selectedType === "task") {
-        taskElemType.innerHTML = '<i class="fas fa-hammer"></i>';
+        taskElemType.innerHTML = taskIcons[0];
         taskElemType.className = `type-icon task`;
       } else if (selectedType === "bug") {
-        taskElemType.innerHTML = '<i class="fas fa-bug"></i>';
+        taskElemType.innerHTML = taskIcons[1];
         taskElemType.className = `type-icon bug`;
       } else if (selectedType === "epic") {
-        taskElemType.innerHTML = '<i class="fas fa-mountain"></i>';
+        taskElemType.innerHTML = taskIcons[2];
         taskElemType.className = `type-icon epic`;
       }
     });

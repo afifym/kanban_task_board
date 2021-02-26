@@ -252,13 +252,13 @@ class Task {
     );
 
     if (this.type === "task") {
-      this.elemType.innerHTML = '<i class="fas fa-hammer"></i>';
+      this.elemType.innerHTML = taskIcons[0];
       this.elemType.className = `type-icon task`;
     } else if (this.type === "bug") {
-      this.elemType.innerHTML = '<i class="fas fa-bug"></i>';
+      this.elemType.innerHTML = taskIcons[1];
       this.elemType.className = `type-icon bug`;
     } else if (this.type === "epic") {
-      this.elemType.innerHTML = '<i class="fas fa-mountain"></i>';
+      this.elemType.innerHTML = taskIcons[2];
       this.elemType.className = `type-icon epic`;
     }
 

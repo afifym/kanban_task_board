@@ -6,7 +6,7 @@ const lColors = ["#AB4D72", "#4E5B9F", "#CD9F63", "#0DC378"];
 
 let itemOrList = null;
 let selectedTaskID = undefined;
-
+let draggedTask = null;
 // #########################
 // FUNCTIONS
 // #########################
@@ -39,14 +39,6 @@ let selectedTaskID = undefined;
   }
 
   board.addEventListener("dragover", (e) => {
-    onDragOver(e);
-  });
-
-  board.addEventListener("touchmove", (e) => {
-    onDragOver(e);
-  });
-
-  function onDragOver(e) {
     e.preventDefault();
 
     let elem = e.target;
@@ -88,7 +80,7 @@ let selectedTaskID = undefined;
         lastItemOrList = itemOrList;
       }
     }
-  }
+  });
 })();
 
 // ADD_BTN
@@ -239,66 +231,6 @@ let selectedTaskID = undefined;
     popForm.laccent.value = listData.acIndex;
   }
 })();
-// TODO: Update ListsData
-// Single Popview
-function popviewsSetup() {
-  const settings = document.querySelectorAll(".task-list-settings");
-  settings.forEach((setting) => {
-    setting.addEventListener("click", showPopView);
-  });
-
-  function showPopView(e) {
-    e.stopPropagation();
-    console.log("setting");
-    console.log(e.target);
-
-    const listElem = e.target.closest(".task-list-container");
-    const listID = parseInt(listElem.dataset.listnum);
-    const listForm = listElem.querySelector(".list-form");
-
-    // listElem.querySelector(".popview").classList.toggle("popview-active");
-
-    listForm.lname.value = listElem.querySelector(".task-list-title").innerHTML;
-    listForm[`laccent${listID}`].value = getList(listID).acIndex;
-  }
-
-  const popviews = document.querySelectorAll(".popview");
-  popviews.forEach((popview) => {
-    // NAME INPUT
-    const popNameInput = popview.querySelector(".list-form .form-name input");
-    popNameInput.addEventListener("input", (e) => {
-      e.target
-        .closest(".task-list-container")
-        .querySelector(".task-list-title").innerHTML = e.target.value;
-    });
-
-    // ACCENT INPUT
-    const popAccentInputs = popview.querySelectorAll(".form-accent input");
-    popAccentInputs.forEach((acInput) => {
-      acInput.addEventListener("input", (e) => {
-        const listID = e.target.closest(".task-list-container").dataset.listnum;
-        getForm(parseInt(listID)).acIndex = e.target.value;
-
-        e.target
-          .closest(".task-list-container")
-          .setAttribute(
-            "style",
-            `border-top-color: ${lColors[e.target.value]}`
-          );
-      });
-    });
-
-    // CLICK
-    popview.addEventListener("click", (e) => {
-      e.stopPropagation();
-    });
-
-    // SUBMIT
-    popview.querySelector("form").addEventListener("submit", (e) => {
-      e.preventDefault();
-    });
-  });
-}
 
 (function populatePopviewsAccents() {
   const listFormAccent = document.querySelectorAll(".list-form .form-accent");
@@ -360,6 +292,10 @@ function popviewsSetup() {
     );
 
     taskElemName.innerHTML = e.target.value;
+  });
+
+  modalForm.addEventListener("submit", (e) => {
+    e.preventDefault();
   });
 
   const taskTypeInputs = modalForm.querySelectorAll(".form-type input");

@@ -1,3 +1,10 @@
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("sw.js")
+    .then((reg) => console.log("Registered Successfuly ", reg))
+    .catch((err) => console.log("Not Registered ", err));
+}
+
 // #########################
 // TASK_MODEL
 // #########################
@@ -40,8 +47,6 @@ class Task {
     this.elem.classList.add("task-item");
     this.elem.addEventListener("dragstart", this.onDragStart);
     this.elem.addEventListener("dragend", this.onDragEnd);
-    this.elem.addEventListener("touchstart", this.onDragStart);
-    this.elem.addEventListener("touchend", this.onDragEnd);
     this.elem.addEventListener("click", this.onClick);
     this.elem.addEventListener("blur", this.onBlur);
 
@@ -89,12 +94,16 @@ class Task {
     e.stopPropagation();
     const taskID = parseInt(e.target.closest(".task-item").dataset.taskid);
     moveTaskToNext(taskID);
+    localStorage.setItem("tasksData", JSON.stringify(Task.allTasks));
+    localStorage.setItem("listsData", JSON.stringify(listsData));
   }
 
   onPrevious(e) {
     e.stopPropagation();
     const taskID = parseInt(e.target.closest(".task-item").dataset.taskid);
     moveTaskToPrevious(taskID);
+    localStorage.setItem("tasksData", JSON.stringify(Task.allTasks));
+    localStorage.setItem("listsData", JSON.stringify(listsData));
   }
 
   // #########################
@@ -110,6 +119,7 @@ class Task {
       .classList.remove("modal-active");
 
     e.target.classList.add("task-dragging");
+
     e.dataTransfer.setData(
       "draggedID",
       parseInt(e.target.closest(".task-item").dataset.taskid)
@@ -133,6 +143,12 @@ class Task {
     if (deleteSector.classList.contains("delete-active")) {
       deleteSector.classList.remove("delete-active");
     } else {
+      const prevListID = parseInt(
+        e.target.closest(".task-list-container").dataset.listnum
+      );
+      const prevListData = getList(prevListID);
+      prevListData.nTasks--;
+
       let nextSibling = e.target.nextElementSibling;
       while (nextSibling) {
         decrementOrder(parseInt(nextSibling.dataset.taskid));
@@ -140,6 +156,12 @@ class Task {
       }
 
       if (itemOrList.classList.contains("task-list")) {
+        const nextListID = parseInt(
+          itemOrList.closest(".task-list-container").dataset.listnum
+        );
+        const nextListData = getList(nextListID);
+        nextListData.nTasks++;
+
         [...itemOrList.children].forEach((itemElem) => {
           incrementOrder(parseInt(itemElem.dataset.taskid));
         });
@@ -149,6 +171,12 @@ class Task {
           list: parseInt(itemOrList.parentElement.dataset.listnum),
         });
       } else if (itemOrList.classList.contains("task-item")) {
+        const nextListID = parseInt(
+          itemOrList.closest(".task-list-container").dataset.listnum
+        );
+        const nextListData = getList(nextListID);
+        nextListData.nTasks++;
+
         const toChange = [];
 
         nextSibling = itemOrList.nextElementSibling;
@@ -176,6 +204,8 @@ class Task {
         itemOrList.parentElement.insertBefore(e.target, itemOrList.nextSibling);
       }
     }
+
+    localStorage.setItem("listsData", JSON.stringify(listsData));
   }
 
   // Submit Updates on Click

@@ -1,4 +1,6 @@
-const tasksData = [
+const useStorage = true;
+
+const tData = [
   {
     name: "This",
     type: "task",
@@ -38,7 +40,7 @@ const tasksData = [
   },
 ];
 
-const listsData = [
+const lData = [
   {
     id: 0,
     name: "Not Started",
@@ -65,7 +67,8 @@ const listsData = [
   },
 ];
 
-const storedTasksData = JSON.parse(localStorage.getItem("tasksData"));
+const tStored = JSON.parse(localStorage.getItem("tasksData"));
+const lStored = JSON.parse(localStorage.getItem("listsData"));
 
 // #########################
 // TASK_MODEL
@@ -153,25 +156,6 @@ function renderTasks(tasks) {
   });
 }
 
-function createTasks(tasks) {
-  tasks.sort((a, b) => {
-    return a.order - b.order;
-  });
-
-  tasks.forEach((item) => {
-    let { name, type, progress, deadline, list, order, acIndex } = item;
-    let task = new Task(name, type, progress, deadline, list, order, acIndex);
-
-    let currentList = getList(list);
-    currentList.nTasks++;
-
-    task.render();
-    task.renderProgress();
-  });
-}
-
-createTasks(tasksData);
-
 function getForm(id) {
   return listsData.find((t) => t.id === id);
 }
@@ -206,9 +190,7 @@ function moveTaskToNext(id) {
     task.order = getList(nextListID).nTasks - 1;
 
     reorderCurrentList(currentListID, currentTaskOrder);
-
     task.render();
-    localStorage.setItem("tasksData", JSON.stringify(Task.allTasks));
   }
 }
 
@@ -238,12 +220,45 @@ function moveTaskToPrevious(taskID) {
     task.order = getList(nextListID).nTasks - 1;
 
     reorderCurrentList(currentListID, currentTaskOrder);
-
     task.render();
-    localStorage.setItem("tasksData", JSON.stringify(Task.allTasks));
   }
 }
 
 function getTasksFromList(listID) {
   const tasks = tasks.filter((t) => t.list === listID);
 }
+
+function createTasks(tasks) {
+  tasks.sort((a, b) => {
+    return a.order - b.order;
+  });
+
+  tasks.forEach((item) => {
+    let { name, type, progress, deadline, list, order, acIndex } = item;
+    let task = new Task(name, type, progress, deadline, list, order, acIndex);
+
+    let currentList = getList(list);
+    currentList.nTasks++;
+
+    task.render();
+    task.renderProgress();
+  });
+}
+
+function constructLists(data) {
+  document.querySelectorAll(".task-list-container").forEach((listElem) => {
+    let listID = parseInt(listElem.dataset.listnum);
+    let listData = getList(listID);
+
+    listElem.querySelector(".task-list-title").innerHTML = listData.name;
+    listElem.setAttribute(
+      "style",
+      `border-top: 4px solid ${lColors[listData.acIndex]};`
+    );
+  });
+}
+
+const tasksData = tStored ? tStored : tData;
+const listsData = lStored ? lStored : lData;
+constructLists(listsData);
+createTasks(tasksData);

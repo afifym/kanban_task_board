@@ -36,11 +36,6 @@ class Task {
   }
 
   elemConstructor() {
-    // Creating Elements
-    // Adding Classes
-    // Adding Events
-    // Appending
-
     this.elem = document.createElement("li");
     this.elem.draggable = true;
     this.elem.dataset.taskid = this.id;
